@@ -1,0 +1,27 @@
+#!/bin/sh
+### BEGIN INIT INFO
+### run pppd and gpio at begining 
+### END INIT INFO
+
+start()
+{
+ echo "SETUPING startX...."
+ mount -t ext4 /dev/mmcblk0p2 /mnt/oldRoot
+ mount -t ext4 /dev/mmcblk0p3 /mnt/newRoot
+ mount /dev/mmcblk0p1 /mnt/boot
+ 
+ xinit /home/launchApps/Apps/UpdaterApps/DummyUpdater -platform xcb -- -nocursor & 
+ exec /home/launchApps/Apps/UpdaterApps/updater_gpg_complete.sh & 
+ 
+ #startx -- -nocursor&
+ #mkdir -p /var/spool/cron/crontabs
+ #crontab /etc/cron.txt &
+}
+
+case "$1" in
+  start)
+    start
+  ;;
+  *)
+  ;;
+esac 
